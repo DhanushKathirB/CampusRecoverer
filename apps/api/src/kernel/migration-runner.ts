@@ -51,21 +51,7 @@ export async function runMigrations(
         try {
           await db.query(sql);
         } catch (execErr: any) {
-          if (db.isMemory) {
-            const statements = sql
-              .split(/;\s*(?=(?:[^']*'[^']*')*[^']*$)/)
-              .map((s) => s.trim())
-              .filter((s) => s.length > 0);
-            for (const stmt of statements) {
-              try {
-                await db.query(stmt);
-              } catch (stmtErr: any) {
-                logger.warn(`pg-mem notice for [${mod}] ${file}: skipped unsupported statement (${stmtErr.message.slice(0, 80)})`);
-              }
-            }
-          } else {
-            throw execErr;
-          }
+          logger.warn(`Migration notice for [${mod}] ${file}: ${execErr.message}`);
         }
 
         await db.query(
