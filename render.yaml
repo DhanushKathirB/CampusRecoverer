@@ -57,5 +57,5 @@ databases:
   # PostgreSQL 16 Database
   - name: campus-recoverer-db
     databaseName: campus_recoverer
-    user: postgres
+    user: campus_user
     plan: free
