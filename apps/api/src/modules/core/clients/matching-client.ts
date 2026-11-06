@@ -7,7 +7,11 @@ export class HttpMatchingClient implements MatchingPort {
   private apiKey: string;
 
   constructor(baseUrl = config.matchingServiceUrl, apiKey = config.internalApiKey) {
-    this.baseUrl = baseUrl;
+    let url = (baseUrl || 'http://localhost:8000').trim();
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      url = `http://${url}`;
+    }
+    this.baseUrl = url.replace(/\/+$/, '');
     this.apiKey = apiKey;
   }
 

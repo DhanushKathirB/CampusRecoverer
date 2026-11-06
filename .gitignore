@@ -8,3 +8,4 @@ __pycache__/
 .coverage
 *.log
 .DS_Store
+.vite/

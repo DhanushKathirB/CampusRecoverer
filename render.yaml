@@ -8,6 +8,8 @@ services:
     plan: free
     healthCheckPath: /healthz
     envVars:
+      - key: PORT
+        value: 8000
       - key: INTERNAL_API_KEY
         generateValue: true
 

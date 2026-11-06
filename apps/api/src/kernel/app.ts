@@ -41,6 +41,17 @@ export async function createApp(options?: {
   app.use(helmet());
   app.use(cors());
   app.use(express.json({ limit: '10mb' }));
+
+  // Handle /api prefix transparently for reverse proxies and direct calls
+  app.use((req: Request, _res: Response, next: NextFunction) => {
+    if (req.url.startsWith('/api/')) {
+      req.url = req.url.slice(4);
+    } else if (req.url === '/api') {
+      req.url = '/';
+    }
+    next();
+  });
+
   app.use(authMiddleware);
 
   // Initialize DB

@@ -15,22 +15,20 @@ const DEV_SEED_USERS = [
 async function main() {
   const { app, ctx } = await createApp();
 
-  // When running with pg-mem (no real DB), seed dev test accounts automatically
-  if (ctx.db.isMemory) {
-    for (const u of DEV_SEED_USERS) {
-      try {
-        const exists = await ctx.db.query('SELECT id FROM users WHERE id = $1', [u.id]);
-        if (exists.rows.length === 0) {
-          await ctx.db.query(
-            `INSERT INTO users (id, email, password_hash, name, role, created_at)
-             VALUES ($1, $2, $3, $4, $5, $6)`,
-            [u.id, u.email, u.password_hash, u.name, u.role, u.created_at],
-          );
-          logger.info(`Dev seed: created user ${u.email} (${u.role})`);
-        }
-      } catch (err: any) {
-        logger.warn(`Dev seed: skipped ${u.email} — ${err.message}`);
+  // Seed initial test/demo accounts if they don't exist
+  for (const u of DEV_SEED_USERS) {
+    try {
+      const exists = await ctx.db.query('SELECT id FROM users WHERE id = $1', [u.id]);
+      if (exists.rows.length === 0) {
+        await ctx.db.query(
+          `INSERT INTO users (id, email, password_hash, name, role, created_at)
+           VALUES ($1, $2, $3, $4, $5, $6)`,
+          [u.id, u.email, u.password_hash, u.name, u.role, u.created_at],
+        );
+        logger.info(`Seed: created demo user ${u.email} (${u.role})`);
       }
+    } catch (err: any) {
+      logger.warn(`Seed: skipped ${u.email} — ${err.message}`);
     }
   }
 

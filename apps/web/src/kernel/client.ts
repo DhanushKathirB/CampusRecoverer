@@ -3,7 +3,7 @@ import { ApiErrorResponse } from './types';
 const TOKEN_KEY = 'campus_recoverer_token';
 
 class ApiClient {
-  private baseUrl: string = '/api';
+  private baseUrl: string = (import.meta as any).env?.VITE_API_BASE_URL || '/api';
 
   getToken(): string | null {
     return localStorage.getItem(TOKEN_KEY);
