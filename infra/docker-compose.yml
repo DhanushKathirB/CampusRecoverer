@@ -73,7 +73,10 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      default: {}
+      default:
+        aliases:
+          - campus-recoverer-api
+          - api
       observability:
         ipv4_address: 172.30.240.10
 
